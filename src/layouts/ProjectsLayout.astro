@@ -1,0 +1,47 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+
+const {projects} = Astro.props;
+dayjs.extend(localizedFormat);
+const displayDate = dayjs(projects.data.pubDate).format("ll")
+import {Image} from "astro:assets";
+---
+
+<BaseLayout sideBarActiveItemID="projects" title={projects.data.title} description={projects.data.description}
+            image={projects.data.heroImage ? projects.data.heroImage.src : ""} ogType="article">
+    <main class="md:flex md:justify-center">
+        <article class="prose prose-lg max-w-[750px] prose-img:mx-auto">
+            {projects.data.heroImage &&
+                    <Image width={750} height={422} format="webp" src={projects.data.heroImage} alt={projects.data.title}
+                           class="w-full mb-6"/>}
+            <h1 class="title !my-2 text-4xl font-bold">{projects.data.title}</h1>
+            {projects.data.pubDate &&
+                    <time>{displayDate}</time>}
+            <br/>
+            {projects.data.badge &&
+                    <div class="badge badge-secondary my-1">{projects.data.badge}</div>}
+            {
+                projects.data.tags &&
+                projects.data.tags.map((tag) => (
+                        <a class="badge border-current ml-2 no-underline">
+                            {tag}
+                        </a>
+                ))
+            }
+            {
+                projects.data.updatedDate && (
+                            <div>
+                                {" "}
+                                Last updated on
+                                <time>{projects.data.updatedDate}</time>
+                                {" "}
+                            </div>
+                )
+            }
+            <div class="divider my-2"></div>
+            <slot/>
+        </article>
+    </main>
+</BaseLayout>

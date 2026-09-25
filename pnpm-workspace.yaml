@@ -1,0 +1,4 @@
+# This tells pnpm to explicitly trust and build these dependencies in CI environments
+allowBuilds:
+  esbuild: true
+  sharp: true
